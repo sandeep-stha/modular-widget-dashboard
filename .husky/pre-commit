@@ -1,0 +1,17 @@
+echo ""
+echo "🔍✨ Running pre-commit checks..."
+echo ""
+
+echo "🔍 Running type-check before commit..."
+npm run type-check || exit 1
+echo ""
+
+echo "🔍 Running lint-staged..."
+npx lint-staged || exit 1
+echo ""
+
+echo ""
+echo "✅🎉 Pre-commit checks passed!"
+echo ""
+echo "🚀 Ready to commit your changes!"
+echo ""
