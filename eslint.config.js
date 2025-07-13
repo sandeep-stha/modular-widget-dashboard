@@ -124,6 +124,7 @@ export default [
       'unicorn/filename-case': 'off',
       'unicorn/prefer-module': 'off',
       'unicorn/prevent-abbreviations': 'off',
+      'unicorn/prefer-global-this': 'off',
 
       ...pluginPrettier.configs.recommended.rules,
 
