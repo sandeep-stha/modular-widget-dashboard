@@ -1,2 +1,1 @@
-export * from './DndKit';
-export * from './PaletteCard';
+export * from './Card';

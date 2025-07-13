@@ -1,0 +1,38 @@
+import { useEffect, useState } from 'react';
+
+export function useTheme(initial = 'system') {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === 'undefined') return initial;
+    return localStorage.getItem('theme') || initial;
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    function applyTheme(theme: string) {
+      root.classList.remove('light', 'dark');
+
+      if (theme === 'system') {
+        const isDark = window.matchMedia(
+          '(prefers-color-scheme: dark)'
+        ).matches;
+        root.classList.add(isDark ? 'dark' : 'light');
+      } else {
+        root.classList.add(theme);
+      }
+    }
+
+    applyTheme(theme);
+
+    localStorage.setItem('theme', theme);
+
+    if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const listener = () => applyTheme('system');
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
+    }
+  }, [theme]);
+
+  return [theme, setTheme] as const;
+}
