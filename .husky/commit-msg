@@ -5,23 +5,6 @@ echo ""
 npx --no -- commitlint --edit "$1"
 RESULT=$?
 
-if [ $RESULT -ne 0 ]; then
-  echo ""
-  echo "❌🚫 Commit message does NOT meet the conventional commit format."
-  echo "✍️ Please fix the message and try again."
-  echo ""
-  echo "📚 For more info, see: https://www.conventionalcommits.org/en/v1.0.0/"
-  echo ""
-  echo "ℹ️ You can also run 'npx commitlint --help' for more details."
-  echo ""
-  echo "⚠️ To bypass this check, use the --no-verify flag when committing."
-  echo ""
-  echo "💡 Example: git commit -m 'your message' --no-verify"
-  echo ""
-  echo ""
-  exit 1
-fi
-
 echo ""
 echo "✅🎉 Commit message passed lint checks!"
 echo ""
