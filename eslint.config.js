@@ -5,6 +5,7 @@ import pluginPrettier from 'eslint-plugin-prettier';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import pluginReactRefresh from 'eslint-plugin-react-refresh';
+import pluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -39,19 +40,53 @@ export default [
       react: pluginReact,
       'react-hooks': pluginReactHooks,
       'react-refresh': pluginReactRefresh,
-      'jsx-a11y': pluginJsxA11y,
       import: pluginImport,
+      'jsx-a11y': pluginJsxA11y,
+      unicorn: pluginUnicorn,
       prettier: pluginPrettier,
     },
 
     rules: {
-      'prettier/prettier': 'error',
+      'no-console': 'error',
+      'no-debugger': 'error',
+
+      'no-duplicate-imports': 'error',
+
+      'no-empty': 'error',
+      'prefer-const': 'warn',
+      'no-var': 'error',
+      'no-redeclare': 'error',
+      'no-unsafe-optional-chaining': 'warn',
+
+      'object-shorthand': ['error', 'always'],
+      'arrow-body-style': ['error', 'as-needed'],
+
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          caughtErrors: 'none',
+        },
+      ],
+
+      ...pluginReact.configs.recommended.rules,
 
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
 
-      'react-hooks/rules-of-hooks': 'error',
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+
+      ...pluginReactHooks.configs.recommended.rules,
+
       'react-hooks/exhaustive-deps': 'warn',
+
+      ...pluginReactRefresh.configs.recommended.rules,
+
+      ...pluginImport.configs.recommended.rules,
 
       'import/order': [
         'warn',
@@ -66,6 +101,14 @@ export default [
             'object',
             'type',
           ],
+          pathGroups: [
+            {
+              pattern: '@/**',
+              group: 'internal',
+              position: 'before',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
           'newlines-between': 'always',
           alphabetize: {
             order: 'asc',
@@ -73,6 +116,18 @@ export default [
           },
         },
       ],
+
+      ...pluginJsxA11y.configs.recommended.rules,
+
+      ...pluginUnicorn.configs.recommended.rules,
+
+      'unicorn/filename-case': 'off',
+      'unicorn/prefer-module': 'off',
+      'unicorn/prevent-abbreviations': 'off',
+
+      ...pluginPrettier.configs.recommended.rules,
+
+      'prettier/prettier': 'error',
     },
 
     settings: {

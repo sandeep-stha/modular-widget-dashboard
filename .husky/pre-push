@@ -2,7 +2,7 @@ echo ""
 echo "🏗️  Running build before push..."
 echo ""
 
-bun run build || exit 1
+npm run build || exit 1
 
 echo ""
 echo "✅ Build succeeded! Proceeding with push..."
