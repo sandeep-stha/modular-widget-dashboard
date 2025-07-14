@@ -9,8 +9,10 @@
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],
+      "@constant/*": ["./src/shared/constants/*"],
+      "@enums/*": ["./src/shared/enums/*"],
       "@hooks/*": ["./src/shared/hooks/*"],
-      "@components/*": ["./src/shared/component/*"],
+      "@components/*": ["src/shared/components/*"],
       "@layouts/*": ["./src/shared/layout/*"],
       "@pages/*": ["./src/pages/*"]
     }
