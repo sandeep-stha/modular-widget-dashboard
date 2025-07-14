@@ -1,23 +1,19 @@
 import {
+  Card,
   CardDescription,
   CardHeader,
   CardTitle,
-  Card as ShadcnCard,
 } from '@/components/ui/card';
 
-export function Card({
-  title,
-  description,
-}: {
-  title: string;
-  description?: string;
-}) {
+import type { PaletteCardProps } from './types-card';
+
+export function PaletteCard({ title, description }: PaletteCardProps) {
   return (
-    <ShadcnCard className="w-full">
+    <Card className="w-full dark:bg-slate-500 dark:text-white">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-    </ShadcnCard>
+    </Card>
   );
 }

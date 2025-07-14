@@ -264,13 +264,6 @@
     overflow: auto;
   }
 
-  input,
-  select,
-  textarea,
-  button {
-    @apply border border-border rounded-md outline-none focus:outline-2 focus:outline-ring transition;
-  }
-
   *:focus-visible {
     outline-offset: 2px;
     outline-color: var(--ring);
