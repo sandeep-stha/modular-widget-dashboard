@@ -12,7 +12,7 @@ export function Sidebar({
 
   return (
     <aside className="relative w-[clamp(250px,_20%,_400px)] shadow-md flex flex-col gap-y-6 bg-blue-200 dark:bg-slate-800 p-4 text-black dark:text-white">
-      <h2 className="text-lg font-semibold mb-2">Components</h2>
+      <h2 className="text-xl font-bold mb-2">Component List</h2>
 
       <div className="flex-1 flex flex-col w-full overflow-y-auto gap-y-10">
         {Dynamic_Components_List.map((componentItm) => {

@@ -6,8 +6,8 @@ type MandatoryDndKitPropsType = {
 };
 
 type BaseDndKitPropsType = {
-  metaData?: Record<'type', string>;
   children: ReactNode;
+  metaData?: Record<'type', string>;
 } & MandatoryDndKitPropsType;
 
 type TrashBinDroppablePropsType = {

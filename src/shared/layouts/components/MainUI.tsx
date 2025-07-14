@@ -11,21 +11,15 @@ import {
   type UniqueIdentifier,
 } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Droppable, PaletteCard, SortableItem } from '@/shared/components';
-import {
-  Dynamic_Components_List,
-  Dynamic_Components_List_Dropzone_ID,
-  Dynamic_Components_List_Sortable_Zone_ID,
-} from '@/shared/constants';
+import { PaletteCard } from '@/shared/components';
+import { Dynamic_Components_List } from '@/shared/constants';
 import { ELayoutBasedDndKitVariants } from '@/shared/enums';
 
+import { DroppableSortArea } from './DroppableSortArea';
 import { Sidebar } from './Sidebar';
 
 import type { LayoutDndActiveElementType } from './types-component';
@@ -59,47 +53,8 @@ export function MainUI() {
         {/* Sidebar */}
         <Sidebar currentActiveItm={currentActiveItm} />
 
-        <section className="flex-1 flex flex-col  bg-blue-100 dark:bg-slate-700 shadow-md p-4 gap-y-6">
-          <h1 className="text-2xl font-bold mb-4">Main</h1>
-          <p className="text-base leading-relaxed mb-4">
-            This layout also supports <strong>light</strong>,
-            <strong>dark</strong>, and <strong>system</strong> themes. Try
-            switching themes to see it in action.
-          </p>
-          <p className="text-base leading-relaxed mb-4">
-            You can <strong>re-arrange</strong> the components as you like,
-          </p>
-
-          <Droppable id={Dynamic_Components_List_Dropzone_ID}>
-            <SortableContext
-              id={Dynamic_Components_List_Sortable_Zone_ID}
-              items={droppedItems}
-            >
-              {droppedItems.map((droppedId) => {
-                const paletteCardComponent = Dynamic_Components_List.find(
-                  (paletteCardItm) =>
-                    droppedId?.toString().includes(paletteCardItm.id)
-                );
-
-                return paletteCardComponent ? (
-                  <SortableItem
-                    key={droppedId}
-                    id={droppedId}
-                    metaData={{
-                      type: ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE,
-                    }}
-                  >
-                    <PaletteCard
-                      key={droppedId}
-                      title={paletteCardComponent.title}
-                      description={paletteCardComponent.description}
-                    />
-                  </SortableItem>
-                ) : null;
-              })}
-            </SortableContext>
-          </Droppable>
-        </section>
+        {/* Component Droppable and Sortable Area */}
+        <DroppableSortArea droppedItems={droppedItems} />
       </main>
 
       {createPortal(

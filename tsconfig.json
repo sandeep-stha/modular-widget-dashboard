@@ -13,7 +13,7 @@
       "@enums/*": ["./src/shared/enums/*"],
       "@hooks/*": ["./src/shared/hooks/*"],
       "@components/*": ["src/shared/components/*"],
-      "@layouts/*": ["./src/shared/layout/*"],
+      "@layouts/*": ["src/shared/layouts/*"],
       "@pages/*": ["./src/pages/*"]
     }
   }
