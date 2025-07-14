@@ -11,11 +11,13 @@ export function TrashbinDroppable({
   return (
     <div
       ref={enabled ? setNodeRef : null}
-      className={`w-full bg-red-100 dark:bg-red-950 p-4 rounded-md border-2 transition-colors text-red-700 dark:text-red-300 ${
-        isOver ? 'border-red-500 bg-red-200' : 'border-gray-300'
+      className={`w-full p-4 rounded-md border-2 transition-colors  ${
+        isOver
+          ? 'border-red-400 bg-red-500 dark:bg-red-700 text-red-100'
+          : 'border-red-500 dark:border-red-900 bg-red-200 text-red-700'
       } ${enabled ? 'opacity-100' : 'opacity-50'}`}
     >
-      🗑 Drop here to delete
+      🗑 &nbsp; Drop here to delete
     </div>
   );
 }
