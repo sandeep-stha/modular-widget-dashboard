@@ -50,7 +50,6 @@ export function MainUI() {
       onDragCancel={handleDragCancel}
     >
       <main className="flex-1 overflow-auto flex">
-        {/* Sidebar */}
         <Sidebar currentActiveItm={currentActiveItm} />
 
         {/* Component Droppable and Sortable Area */}

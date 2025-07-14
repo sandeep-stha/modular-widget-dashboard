@@ -29,7 +29,7 @@ export function Draggable({ id, metaData, children }: BaseDndKitPropsType) {
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className={`${isThisDragging ? 'opacity-50 cursor-default' : 'opacity-100 cursor-pointer'}`}
+      className={`${isThisDragging ? 'opacity-50' : 'opacity-100'}`}
     >
       {children}
     </button>
