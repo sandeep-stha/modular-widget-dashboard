@@ -3,32 +3,42 @@ import {
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
-  pointerWithin,
   useSensor,
   useSensors,
   type DragEndEvent,
   type DragStartEvent,
-  type UniqueIdentifier,
 } from '@dnd-kit/core';
-import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { snapCenterToCursor } from '@dnd-kit/modifiers';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { Info } from 'lucide-react';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { PaletteCard } from '@/shared/components';
-import { Dynamic_Components_List } from '@/shared/constants';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { DASHBOARD_CHART_COMPONENT_LIST } from '@/shared/constants';
 import { ELayoutBasedDndKitVariants } from '@/shared/enums';
+import {
+  generateUIComponentByTypeUtil,
+  modifyInputDataUtil,
+} from '@/shared/utils';
 
 import { DroppableSortArea } from './DroppableSortArea';
-import { Sidebar } from './Sidebar';
+import { SidebarList } from './SidebarList';
+import { TrashbinDroppable } from './TrashbinDroppable';
 
-import type { LayoutDndActiveElementType } from './types-component';
+import type {
+  DroppedItemsType,
+  LayoutDndActiveElementType,
+} from './types-component';
 
 export function MainUI() {
   const [currentActiveItm, setCurrentActiveItm] =
     useState<LayoutDndActiveElementType | null>(null);
 
-  const [droppedItems, setDroppedItems] = useState<UniqueIdentifier[]>([]);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -36,34 +46,66 @@ export function MainUI() {
     })
   );
 
-  const activeComponent = Dynamic_Components_List.find((componentItm) =>
-    currentActiveItm?.id?.toString().includes(componentItm.id)
+  const [droppedItems, setDroppedItems] = useState<DroppedItemsType>([]);
+
+  const activeComponent = DASHBOARD_CHART_COMPONENT_LIST.find(
+    (componentItm) => {
+      const parsedCurrentActiveItmID = modifyInputDataUtil(
+        currentActiveItm?.id,
+        {
+          replace: [ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE],
+          removeAfterLastMatch: '-',
+        }
+      );
+      return parsedCurrentActiveItmID === componentItm.id;
+    }
   );
+
+  const isTrashbinDroppableEnabled =
+    currentActiveItm?.type !== ELayoutBasedDndKitVariants.SIDEBAR;
 
   return (
     <DndContext
-      collisionDetection={pointerWithin}
       sensors={sensors}
-      modifiers={[restrictToWindowEdges]}
+      modifiers={[snapCenterToCursor]}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
       <main className="flex-1 overflow-auto flex">
-        <Sidebar currentActiveItm={currentActiveItm} />
+        <aside className="relative w-[clamp(250px,_20%,_400px)] shadow-md flex flex-col gap-y-6 bg-blue-200 dark:bg-slate-800 p-4 text-black dark:text-white">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <h2 className="inline-flex gap-2 text-xl font-bold mb-2">
+                Pick Components <Info className="cursor-pointer" />
+              </h2>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                Drag the components below and put them in main section in the
+                right
+              </p>
+            </TooltipContent>
+          </Tooltip>
+
+          {/* Sidebar Draggable Items List */}
+
+          <SidebarList />
+
+          {/* Sidebar Droppable Trash Bin Area */}
+          <TrashbinDroppable
+            id={ELayoutBasedDndKitVariants.TRASH_BIN}
+            enabled={isTrashbinDroppableEnabled}
+          />
+        </aside>
 
         {/* Component Droppable and Sortable Area */}
         <DroppableSortArea droppedItems={droppedItems} />
       </main>
 
       {createPortal(
-        <DragOverlay>
-          {activeComponent ? (
-            <PaletteCard
-              title={activeComponent.title}
-              description={activeComponent.description}
-            />
-          ) : null}
+        <DragOverlay className="select-none pointer-events-none cursor-grabbing">
+          {generateUIComponentByTypeUtil(activeComponent)}
         </DragOverlay>,
         document.body
       )}
@@ -84,6 +126,8 @@ export function MainUI() {
   }
 
   function handleDragEnd(event: DragEndEvent) {
+    const droppedItmIdArr = droppedItems?.map((droppedItm) => droppedItm?.id);
+
     const { active, over } = event;
 
     if (!over) {
@@ -91,32 +135,50 @@ export function MainUI() {
       return;
     }
 
-    const activeId = active.id;
-    const overId = over.id;
+    const activeId = active.id?.toString();
+    const overId = over.id?.toString();
 
-    const isActiveInList = droppedItems.includes(activeId);
-    const isOverInList = droppedItems.includes(overId);
+    const isActiveInList = droppedItmIdArr.includes(activeId);
 
-    const oldIndex = droppedItems.indexOf(activeId);
-    const newIndex = droppedItems.indexOf(overId);
+    const isOverInList = droppedItmIdArr.includes(overId);
+
+    const oldIndex = droppedItems.findIndex((itm) => itm?.id === activeId);
+    const newIndex = droppedItems.findIndex((itm) => itm?.id === overId);
 
     const isSorting = isActiveInList && isOverInList && activeId !== overId;
 
+    // Deletion
     if (over?.id === ELayoutBasedDndKitVariants.TRASH_BIN) {
       const newDroppedItemAfterDeletion = droppedItems?.filter(
-        (droppedItm) => droppedItm !== activeId
+        (droppedItm) => droppedItm?.id !== activeId
       );
+
       setDroppedItems(newDroppedItemAfterDeletion);
     }
 
+    // Sorting
     if (isSorting) {
-      const reordered = [...droppedItems];
-      reordered.splice(oldIndex, 1);
-      reordered.splice(newIndex, 0, activeId);
+      setDroppedItems((prev) => {
+        const item = prev[oldIndex];
+        const withoutItem = prev.filter((_, idx) => idx !== oldIndex);
 
-      setDroppedItems(reordered);
+        const reordered = [
+          ...withoutItem.slice(0, newIndex),
+          item,
+          ...withoutItem.slice(newIndex),
+        ];
+
+        return reordered;
+      });
     } else if (!isActiveInList) {
-      setDroppedItems((prev) => [...prev, activeId]);
+      // Addition
+      setDroppedItems((prev) => [
+        ...prev,
+        {
+          id: active.id + ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE,
+          metaData: null,
+        },
+      ]);
     }
 
     setCurrentActiveItm(null);

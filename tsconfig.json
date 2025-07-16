@@ -12,6 +12,7 @@
       "@constant/*": ["./src/shared/constants/*"],
       "@enums/*": ["./src/shared/enums/*"],
       "@hooks/*": ["./src/shared/hooks/*"],
+      "@utils/*": ["./src/shared/utils/*"],
       "@components/*": ["src/shared/components/*"],
       "@layouts/*": ["src/shared/layouts/*"],
       "@pages/*": ["./src/pages/*"]

@@ -1,0 +1,4 @@
+const ITEM_WIDTH = 300;
+const ITEM_HEIGHT = 250;
+
+export { ITEM_HEIGHT, ITEM_WIDTH };
