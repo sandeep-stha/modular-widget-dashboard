@@ -1,2 +1,2 @@
-export * from './use-disable-devtools';
+export * from './use-disableDevtools';
 export * from './use-theme';

@@ -11,7 +11,9 @@ export function Draggable({ id, metaData, children }: BaseDndKitPropsType) {
     ...(metaData ? { data: metaData } : {}),
   });
 
-  const parsedId = id ? id.toString().split('-').slice(0, -1)?.join('-') : null;
+  const idSplitArr = id ? id.toString().split('-').slice(0, -1) : [];
+
+  const parsedId = idSplitArr?.length ? idSplitArr?.join('-') : null;
 
   const activeIdIncludesParsedId = active?.id
     ?.toString()
@@ -29,7 +31,7 @@ export function Draggable({ id, metaData, children }: BaseDndKitPropsType) {
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className={`${isThisDragging ? 'opacity-50' : 'opacity-100'}`}
+      className={`touch-none ${isThisDragging ? 'opacity-50 !cursor-grabbing' : 'opacity-100 cursor-grab'}`}
     >
       {children}
     </button>

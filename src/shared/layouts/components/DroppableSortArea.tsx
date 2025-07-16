@@ -1,11 +1,19 @@
 import { SortableContext } from '@dnd-kit/sortable';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { VariableSizeGrid as Grid } from 'react-window';
+import { Info } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { FixedSizeGrid as Grid } from 'react-window';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Droppable } from '@/shared/components';
 import {
-  Dynamic_Components_List_Dropzone_ID,
-  Dynamic_Components_List_Sortable_Zone_ID,
+  DASHBOARD_CHART_COMPONENT_LIST_DROPPABLE_ZONE_ID,
+  DASHBOARD_CHART_COMPONENT_LIST_SORTABLE_ZONE_ID,
+  ITEM_HEIGHT,
+  ITEM_WIDTH,
 } from '@/shared/constants';
 
 import { VirtualSortableItm } from './VirtualSortableItm';
@@ -15,133 +23,70 @@ import type { DroppableSortAreaPropsType } from './types-component';
 export function DroppableSortArea({
   droppedItems,
 }: DroppableSortAreaPropsType) {
-  const minColumnWidth = 320;
-  const defaultRowHeight = 160;
-
-  const [columnCount, setColumnCount] = useState(1);
-
-  const rowCount = Math.ceil(droppedItems.length / columnCount);
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [containerWidth, setContainerWidth] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(0);
 
-  const [columnWidths, setColumnWidths] = useState<number[]>(() =>
-    Array.from({ length: columnCount }, () => minColumnWidth)
-  );
-
-  const [rowHeights, setRowHeights] = useState<number[]>(() =>
-    Array.from({ length: rowCount }, () => defaultRowHeight)
-  );
-
-  const gridRef = useRef<Grid>(null);
-
-  const gridWidth = columnWidths.reduce((a, b) => a + b, 0);
-
-  const gridHeight = 600;
+  const [columnCount, setColumnCount] = useState(1);
 
   useEffect(() => {
-    if (!containerWidth) return;
+    function updateSize() {
+      if (containerRef.current) {
+        const width = containerRef.current.clientWidth;
+        const height = containerRef.current.clientHeight;
 
-    const newColumnCount = Math.max(
-      1,
-      Math.floor(containerWidth / minColumnWidth)
-    );
-    setColumnCount(newColumnCount);
-  }, [containerWidth]);
+        setContainerWidth(width - 100);
+        setContainerHeight(height);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerWidth(entry.contentRect.width);
+        const cols = Math.max(1, Math.floor(width / ITEM_WIDTH));
+        setColumnCount(cols);
       }
-    });
+    }
 
-    resizeObserver.observe(containerRef.current);
+    updateSize();
 
-    return () => resizeObserver.disconnect();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  useEffect(() => {
-    setRowHeights((heights) => {
-      if (heights.length === rowCount) return heights;
-      const newHeights = [...heights];
-      if (newHeights.length < rowCount) newHeights.push(defaultRowHeight);
-      if (newHeights.length > rowCount) newHeights.pop();
-      return newHeights;
-    });
-  }, [rowCount]);
-
-  useEffect(() => {
-    setColumnWidths((widths) => {
-      if (widths.length === columnCount) return widths;
-      const newWidths = [...widths];
-      while (newWidths.length < columnCount) newWidths.push(minColumnWidth);
-      while (newWidths.length > columnCount) newWidths.pop();
-      return newWidths;
-    });
-  }, [columnCount]);
-
-  const setRowHeight = useCallback((rowIndex: number, size: number) => {
-    setRowHeights((heights) => {
-      if (heights[rowIndex] === size) return heights;
-      const newHeights = [...heights];
-      newHeights[rowIndex] = size;
-      return newHeights;
-    });
-    gridRef.current?.resetAfterRowIndex(rowIndex);
-  }, []);
-
-  const setColumnWidth = useCallback((colIndex: number, size: number) => {
-    setColumnWidths((widths) => {
-      if (widths[colIndex] === size) return widths;
-      const newWidths = [...widths];
-      newWidths[colIndex] = size;
-      return newWidths;
-    });
-    gridRef.current?.resetAfterColumnIndex(colIndex);
-  }, []);
+  const rowCount = Math.ceil(droppedItems.length / columnCount);
 
   return (
     <section
       ref={containerRef}
-      className="flex-1 flex flex-col bg-blue-100 dark:bg-slate-700 shadow-md p-4 gap-y-6"
+      className="w-full flex-1 flex flex-col bg-blue-100 dark:bg-slate-700 shadow-md p-4 gap-y-6"
+      style={{ minHeight: '300px' }}
     >
-      <h1 className="text-2xl font-bold mb-4">Draggable/Sortable Area</h1>
-      <p className="text-base leading-relaxed mb-4">
-        This layout also supports <strong>light</strong>, <strong>dark</strong>,
-        and <strong>system</strong> themes.
-      </p>
-      <p className="text-base leading-relaxed mb-4">
-        Try <strong>dropping</strong> the components below from the component{' '}
-        <strong>sidebar</strong>. You can <strong>re-arrange</strong> them as
-        you like.
-      </p>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <h2 className="inline-flex gap-2 text-2xl font-bold mb-2">
+            Drop Components Here <Info className="cursor-pointer" />
+          </h2>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Drag the components from the sidebar and drop them in below</p>
+        </TooltipContent>
+      </Tooltip>
 
-      <Droppable id={Dynamic_Components_List_Dropzone_ID}>
+      <Droppable id={DASHBOARD_CHART_COMPONENT_LIST_DROPPABLE_ZONE_ID}>
         <SortableContext
-          id={Dynamic_Components_List_Sortable_Zone_ID}
+          id={DASHBOARD_CHART_COMPONENT_LIST_SORTABLE_ZONE_ID}
           items={droppedItems}
         >
-          <Grid
-            ref={gridRef}
-            columnCount={columnCount}
-            rowCount={rowCount}
-            columnWidth={(index) => columnWidths[index] || minColumnWidth}
-            rowHeight={(index) => rowHeights[index] || defaultRowHeight}
-            width={gridWidth}
-            height={gridHeight}
-            itemData={{
-              droppedItems,
-              columnCount,
-              setRowHeight,
-              setColumnWidth,
-            }}
-          >
-            {VirtualSortableItm}
-          </Grid>
+          {containerWidth > 0 && containerHeight > 0 && (
+            <Grid
+              columnCount={columnCount}
+              rowCount={rowCount}
+              columnWidth={ITEM_WIDTH}
+              rowHeight={ITEM_HEIGHT}
+              width={containerWidth}
+              height={containerHeight}
+              itemData={{ droppedItems, columnCount }}
+            >
+              {VirtualSortableItm}
+            </Grid>
+          )}
         </SortableContext>
       </Droppable>
     </section>

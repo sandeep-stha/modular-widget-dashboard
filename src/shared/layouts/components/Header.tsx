@@ -1,3 +1,5 @@
+import { Moon, Sun } from 'lucide-react';
+
 import {
   Select,
   SelectContent,
@@ -5,7 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { ESystemTheme } from '@/shared/enums';
 import { useTheme } from '@/shared/hooks';
+import { getCurrentSystemTheme } from '@/shared/utils/util-systemTheme';
 
 export function Header() {
   const [theme, setTheme] = useTheme();
@@ -13,11 +17,14 @@ export function Header() {
   return (
     <header className="flex justify-between items-center gap-4 bg-blue-300 dark:bg-slate-900 shadow-md p-4 sticky top-0 z-10">
       <h1 className="text-3xl text-blue-950 dark:text-white font-extrabold">
-        Modular Widget Dashboard
+        💻 &nbsp; Modular Widget Dashboard &nbsp;🛠️
       </h1>
 
       <div className="flex items-center gap-4">
-        <p>Theme</p>
+        <p className="inline-flex gap-2 content-center">
+          Theme {themeIconSwitcher(theme)}
+        </p>
+
         <Select onValueChange={setTheme} value={theme}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Theme" />
@@ -31,4 +38,25 @@ export function Header() {
       </div>
     </header>
   );
+
+  function themeIconSwitcher(theme: string) {
+    switch (theme) {
+      case 'light': {
+        return <Sun />;
+      }
+
+      case 'dark': {
+        return <Moon />;
+      }
+      case 'system': {
+        const currentTheme = getCurrentSystemTheme();
+
+        return currentTheme === ESystemTheme.DARK ? <Moon /> : <Sun />;
+      }
+
+      default: {
+        return <Sun />;
+      }
+    }
+  }
 }

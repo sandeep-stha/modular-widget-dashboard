@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { getCurrentSystemTheme } from '../utils/util-systemTheme';
+
 export function useTheme(initial = 'system') {
   const [theme, setTheme] = useState(() => {
     if (typeof window === 'undefined') return initial;
@@ -13,10 +15,8 @@ export function useTheme(initial = 'system') {
       root.classList.remove('light', 'dark');
 
       if (theme === 'system') {
-        const isDark = window.matchMedia(
-          '(prefers-color-scheme: dark)'
-        ).matches;
-        root.classList.add(isDark ? 'dark' : 'light');
+        const currentTheme = getCurrentSystemTheme();
+        root.classList.add(currentTheme);
       } else {
         root.classList.add(theme);
       }

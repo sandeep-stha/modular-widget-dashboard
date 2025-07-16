@@ -1,8 +1,7 @@
-import { useEffect, useRef } from 'react';
-
-import { PaletteCard, SortableItem } from '@/shared/components';
-import { Dynamic_Components_List } from '@/shared/constants';
+import { DASHBOARD_CHART_COMPONENT_LIST } from '@/shared/constants';
 import { ELayoutBasedDndKitVariants } from '@/shared/enums';
+
+import { SortableDynamicComponentSwitcher } from './SortableDynamicComponentSwitcher';
 
 import type { VirtualSortableItmPropsType } from './types-component';
 
@@ -12,52 +11,31 @@ export function VirtualSortableItm({
   style,
   data,
 }: VirtualSortableItmPropsType) {
-  const { droppedItems, columnCount, setRowHeight, setColumnWidth } = data;
+  const { droppedItems, columnCount } = data;
 
-  const index = rowIndex * columnCount + columnIndex;
+  const droppedItmIdx = rowIndex * columnCount + columnIndex;
 
-  const droppedId = droppedItems[index];
+  const droppedItmId = droppedItems[droppedItmIdx]?.id;
 
-  const paletteCardComponent = Dynamic_Components_List.find((itm) =>
-    droppedId?.toString().includes(itm.id)
+  const paletteCardComponent = DASHBOARD_CHART_COMPONENT_LIST.find(
+    (componentItm) => droppedItmId?.toString()?.includes(componentItm.id)
   );
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-
-    const element = ref.current;
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.target === element) {
-          const { height, width } = entry.contentRect;
-          setRowHeight(rowIndex, height);
-          setColumnWidth(columnIndex, width);
-        }
-      }
-    });
-
-    resizeObserver.observe(element);
-
-    return () => resizeObserver.disconnect();
-  }, [rowIndex, columnIndex, setRowHeight, setColumnWidth]);
-
-  if (!paletteCardComponent || index >= droppedItems.length) return null;
+  if (
+    !droppedItmId ||
+    droppedItmIdx >= droppedItems.length ||
+    !paletteCardComponent
+  )
+    return null;
 
   return (
-    <div ref={ref} style={{ ...style }}>
+    <div style={style}>
       <div className="p-4">
-        <SortableItem
-          key={droppedId}
-          id={droppedId}
+        <SortableDynamicComponentSwitcher
+          key={droppedItmId}
+          id={droppedItmId}
           metaData={{ type: ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE }}
-        >
-          <PaletteCard
-            title={paletteCardComponent.title}
-            description={paletteCardComponent.description}
-          />
-        </SortableItem>
+        />
       </div>
     </div>
   );

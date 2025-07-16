@@ -1,18 +1,18 @@
+import type { MandatoryDndKitPropsType } from '@/shared/components';
+
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridChildComponentProps } from 'react-window';
 
-type droppedItemsType = UniqueIdentifier[];
+type DroppedItemsType = Array<{ id: UniqueIdentifier; metaData?: unknown }>;
 
 type DroppableSortAreaPropsType = {
-  droppedItems: droppedItemsType;
+  droppedItems: DroppedItemsType;
 };
 
 type VirtualSortableItmPropsType = GridChildComponentProps<{
-  droppedItems: UniqueIdentifier[];
+  droppedItems: DroppedItemsType;
   columnCount: number;
-  setRowHeight: (row: number, size: number) => void;
-  setColumnWidth: (col: number, size: number) => void;
 }>;
 
 type LayoutDndActiveElementType = {
@@ -29,9 +29,15 @@ type LayoutBodyPropsType = {
   setDroppedItems: Dispatch<SetStateAction<UniqueIdentifier[]>>;
 };
 
+type TrashBinDroppablePropsType = {
+  enabled?: boolean;
+} & MandatoryDndKitPropsType;
+
 export type {
   DroppableSortAreaPropsType,
+  DroppedItemsType,
   LayoutBodyPropsType,
   LayoutDndActiveElementType,
+  TrashBinDroppablePropsType,
   VirtualSortableItmPropsType,
 };

@@ -10,12 +10,4 @@ type BaseDndKitPropsType = {
   metaData?: Record<'type', string>;
 } & MandatoryDndKitPropsType;
 
-type TrashBinDroppablePropsType = {
-  enabled?: boolean;
-} & MandatoryDndKitPropsType;
-
-export type {
-  BaseDndKitPropsType,
-  MandatoryDndKitPropsType,
-  TrashBinDroppablePropsType,
-};
+export type { BaseDndKitPropsType, MandatoryDndKitPropsType };
