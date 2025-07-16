@@ -66,7 +66,6 @@ export function MainUI() {
 
   return (
     <DndContext
-      // collisionDetection={}
       sensors={sensors}
       modifiers={[snapCenterToCursor]}
       onDragStart={handleDragStart}

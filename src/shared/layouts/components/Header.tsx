@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/select';
 import { ESystemTheme } from '@/shared/enums';
 import { useTheme } from '@/shared/hooks';
-import { getCurrentSystemTheme } from '@/shared/utils/util-systemTheme';
+import { getCurrentSystemThemeUtil } from '@/shared/utils/util-systemTheme';
 
 export function Header() {
   const [theme, setTheme] = useTheme();
@@ -49,7 +49,7 @@ export function Header() {
         return <Moon />;
       }
       case 'system': {
-        const currentTheme = getCurrentSystemTheme();
+        const currentTheme = getCurrentSystemThemeUtil();
 
         return currentTheme === ESystemTheme.DARK ? <Moon /> : <Sun />;
       }

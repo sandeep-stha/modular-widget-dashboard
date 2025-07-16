@@ -18,6 +18,9 @@ import type { BaseChartDataPropsType } from './types-chart';
 export const RadialBarChart = memo(function RadialBarChartComponent({
   data = CHART_DATA_VARIANT_2,
 }: BaseChartDataPropsType<typeof CHART_DATA_VARIANT_2>) {
+  const initialChartConfigKey = (Object.keys(CHART_CONFIG_VARIANT_2) ??
+    [])?.[0];
+
   return (
     <ChartContainer
       config={CHART_CONFIG_VARIANT_2}
@@ -37,7 +40,11 @@ export const RadialBarChart = memo(function RadialBarChartComponent({
           className="first:fill-muted last:fill-background"
           polarRadius={[86, 74]}
         />
-        <RadialBar dataKey="visitors" background cornerRadius={10} />
+        <RadialBar
+          dataKey={initialChartConfigKey}
+          background
+          cornerRadius={10}
+        />
         <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
           <Label
             content={({ viewBox }) => {
@@ -61,7 +68,7 @@ export const RadialBarChart = memo(function RadialBarChartComponent({
                       y={(viewBox.cy || 0) + 24}
                       className="fill-muted-foreground"
                     >
-                      Visitors
+                      {initialChartConfigKey}
                     </tspan>
                   </text>
                 );

@@ -16,6 +16,8 @@ import type { BaseChartDataPropsType } from './types-chart';
 export const StackedBarChart = memo(function StackedBarChartComponent({
   data = CHART_DATA_VARIANT_4,
 }: BaseChartDataPropsType<typeof CHART_DATA_VARIANT_4>) {
+  const dataKeys = Object.keys(data?.[0]) ?? [];
+
   return (
     <ChartContainer config={CHART_CONFIG_VARIANT_4}>
       <BarChart accessibilityLayer data={data}>
@@ -30,18 +32,20 @@ export const StackedBarChart = memo(function StackedBarChartComponent({
             });
           }}
         />
-        <Bar
-          dataKey="running"
-          stackId="a"
-          fill="var(--color-running)"
-          radius={[0, 0, 4, 4]}
-        />
-        <Bar
-          dataKey="swimming"
-          stackId="a"
-          fill="var(--color-swimming)"
-          radius={[4, 4, 0, 0]}
-        />
+        {dataKeys?.slice(1)?.map((dataItm, dataIdx) => {
+          const evenDataIdx = dataIdx % 2 === 0;
+          return (
+            <Bar
+              key={dataItm}
+              dataKey={dataItm}
+              stackId="a"
+              fill={
+                evenDataIdx ? 'var(--color-running)' : 'var(--color-swimming)'
+              }
+              radius={evenDataIdx ? [0, 0, 4, 4] : [4, 4, 0, 0]}
+            />
+          );
+        })}
         <ChartTooltip
           content={
             <ChartTooltipContent

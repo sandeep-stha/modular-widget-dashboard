@@ -15,22 +15,29 @@ import {
   CHART_CONFIG_VARIANT_1,
   CHART_DATA_VARIANT_1,
 } from '@/shared/constants';
+import { generateRandomHexColorCode } from '@/shared/utils';
 
 import type { BaseChartDataPropsType } from './types-chart';
 
 export const AreaChart = memo(function AreaChartComponent({
   data = CHART_DATA_VARIANT_1,
 }: BaseChartDataPropsType<typeof CHART_DATA_VARIANT_1>) {
+  const dataKeys = Object.keys(data?.[0]) ?? [];
+
   return (
-    <ChartContainer config={CHART_CONFIG_VARIANT_1}>
+    <ChartContainer
+      className="min-h-[200px] w-full"
+      config={CHART_CONFIG_VARIANT_1}
+    >
       <ReChartsAreaChart
         accessibilityLayer
         data={data}
         margin={{ left: 12, right: 12 }}
       >
         <CartesianGrid vertical={false} />
+
         <XAxis
-          dataKey="month"
+          dataKey={dataKeys?.[0]}
           tickLine={false}
           axisLine={false}
           tickMargin={8}
@@ -40,22 +47,18 @@ export const AreaChart = memo(function AreaChartComponent({
           cursor={false}
           content={<ChartTooltipContent indicator="dot" />}
         />
-        <Area
-          dataKey="mobile"
-          type="natural"
-          fill="var(--color-mobile)"
-          fillOpacity={0.4}
-          stroke="var(--color-mobile)"
-          stackId="a"
-        />
-        <Area
-          dataKey="desktop"
-          type="natural"
-          fill="var(--color-desktop)"
-          fillOpacity={0.4}
-          stroke="var(--color-desktop)"
-          stackId="a"
-        />
+
+        {dataKeys?.slice(1)?.map((dataItm, dataIdx) => (
+          <Area
+            key={dataItm}
+            dataKey={dataItm}
+            type="natural"
+            fill={`${dataIdx <= 5 ? `var(--chart-${dataIdx + 1})` : generateRandomHexColorCode()}`}
+            fillOpacity={0.4}
+            stroke={`${dataIdx <= 5 ? `var(--chart-${dataIdx + 1})` : generateRandomHexColorCode()}`}
+            stackId="a"
+          />
+        ))}
       </ReChartsAreaChart>
     </ChartContainer>
   );

@@ -15,14 +15,21 @@ import {
   CHART_CONFIG_VARIANT_3,
   CHART_DATA_VARIANT_3,
 } from '@/shared/constants';
+import { generateRandomHexColorCode } from '@/shared/utils';
 
 import type { BaseChartDataPropsType } from './types-chart';
 
 export const LineChart = memo(function LineChartComponent({
   data = CHART_DATA_VARIANT_3,
 }: BaseChartDataPropsType<typeof CHART_DATA_VARIANT_3>) {
+  const initialDataKey = (Object.keys(data?.[0]) ?? [])?.[0];
+  const initialChartConfigKey = (Object.keys(CHART_CONFIG_VARIANT_3) ??
+    [])?.[0];
   return (
-    <ChartContainer config={CHART_CONFIG_VARIANT_3}>
+    <ChartContainer
+      className="min-h-[200px] w-full"
+      config={CHART_CONFIG_VARIANT_3}
+    >
       <ReChartsLineChart
         accessibilityLayer
         data={data}
@@ -38,18 +45,25 @@ export const LineChart = memo(function LineChartComponent({
           content={
             <ChartTooltipContent
               indicator="line"
-              nameKey="visitors"
+              nameKey={initialChartConfigKey}
               hideLabel
             />
           }
         />
         <Line
-          dataKey="visitors"
+          dataKey={initialChartConfigKey}
           type="natural"
-          stroke="var(--color-visitors)"
+          stroke={
+            CHART_CONFIG_VARIANT_3?.[
+              initialChartConfigKey as keyof typeof CHART_CONFIG_VARIANT_3
+            ]?.color ?? generateRandomHexColorCode()
+          }
           strokeWidth={2}
           dot={{
-            fill: 'var(--color-visitors)',
+            fill:
+              CHART_CONFIG_VARIANT_3?.[
+                initialChartConfigKey as keyof typeof CHART_CONFIG_VARIANT_3
+              ]?.color ?? generateRandomHexColorCode(),
           }}
           activeDot={{
             r: 6,
@@ -60,7 +74,7 @@ export const LineChart = memo(function LineChartComponent({
             offset={12}
             className="fill-foreground"
             fontSize={12}
-            dataKey="browser"
+            dataKey={initialDataKey}
             formatter={(value: keyof typeof CHART_CONFIG_VARIANT_3) =>
               CHART_CONFIG_VARIANT_3[value]?.label
             }

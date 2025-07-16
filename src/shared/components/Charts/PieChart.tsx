@@ -16,6 +16,10 @@ import type { BaseChartDataPropsType } from './types-chart';
 export const PieChart = memo(function PieChartComponent({
   data = CHART_DATA_VARIANT_2,
 }: BaseChartDataPropsType<typeof CHART_DATA_VARIANT_2>) {
+  const initialDataKey = (Object.keys(data?.[0]) ?? [])?.[0];
+  const initialChartConfigKey = (Object.keys(CHART_CONFIG_VARIANT_2) ??
+    [])?.[0];
+
   return (
     <ChartContainer
       config={CHART_CONFIG_VARIANT_2}
@@ -23,7 +27,12 @@ export const PieChart = memo(function PieChartComponent({
     >
       <ReChartsPieChart>
         <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-        <Pie data={data} dataKey="visitors" label nameKey="browser" />
+        <Pie
+          data={data}
+          dataKey={initialChartConfigKey}
+          label
+          nameKey={initialDataKey}
+        />
       </ReChartsPieChart>
     </ChartContainer>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getCurrentSystemTheme } from '../utils/util-systemTheme';
+import { getCurrentSystemThemeUtil } from '../utils';
 
 export function useTheme(initial = 'system') {
   const [theme, setTheme] = useState(() => {
@@ -15,7 +15,7 @@ export function useTheme(initial = 'system') {
       root.classList.remove('light', 'dark');
 
       if (theme === 'system') {
-        const currentTheme = getCurrentSystemTheme();
+        const currentTheme = getCurrentSystemThemeUtil();
         root.classList.add(currentTheme);
       } else {
         root.classList.add(theme);
