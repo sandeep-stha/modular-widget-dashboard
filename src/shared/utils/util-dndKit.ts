@@ -4,10 +4,12 @@ export function modifyInputDataUtil(
   input?: UniqueIdentifier | string | number,
   options?: {
     replace?: string[];
-    removeAfterLastMatch?: string;
+    popAfterLastMatch?: string;
   }
-): string | undefined {
+): string | number | undefined {
   if (!input) return undefined;
+
+  const initialInputType = typeof input;
 
   let parsedIdentifierID = input.toString();
 
@@ -18,16 +20,26 @@ export function modifyInputDataUtil(
   }
 
   if (
-    options?.removeAfterLastMatch &&
-    parsedIdentifierID.includes(options.removeAfterLastMatch)
+    options?.popAfterLastMatch &&
+    parsedIdentifierID.includes(options.popAfterLastMatch)
   ) {
     const splitInputByMatchArr =
-      parsedIdentifierID.split(options.removeAfterLastMatch) ?? [];
+      parsedIdentifierID.split(options.popAfterLastMatch) ?? [];
 
-    parsedIdentifierID = splitInputByMatchArr
-      ?.slice(0, -1)
-      ?.join(options?.removeAfterLastMatch);
+    const resultAfterLastMatchedElementOmission = splitInputByMatchArr?.slice(
+      0,
+      -1
+    );
+
+    parsedIdentifierID =
+      resultAfterLastMatchedElementOmission?.length > 1
+        ? resultAfterLastMatchedElementOmission?.join(
+            options?.popAfterLastMatch
+          )
+        : resultAfterLastMatchedElementOmission?.[0];
   }
 
-  return parsedIdentifierID;
+  return initialInputType === 'number'
+    ? +parsedIdentifierID
+    : parsedIdentifierID;
 }

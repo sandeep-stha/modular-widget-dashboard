@@ -11,7 +11,13 @@ import tseslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: ['node_modules/**', 'public/**', 'dist/**', 'build/**'],
+    ignores: [
+      'node_modules/**',
+      'public/**',
+      'dist/**',
+      'build/**',
+      'src/components/ui/**',
+    ],
   },
 
   js.configs.recommended,

@@ -15,7 +15,7 @@ import {
   CHART_CONFIG_VARIANT_3,
   CHART_DATA_VARIANT_3,
 } from '@/shared/constants';
-import { generateRandomHexColorCode } from '@/shared/utils';
+import { generateRandomHexColorCodeUtil } from '@/shared/utils';
 
 import type { BaseChartDataPropsType } from './types-chart';
 
@@ -56,14 +56,14 @@ export const LineChart = memo(function LineChartComponent({
           stroke={
             CHART_CONFIG_VARIANT_3?.[
               initialChartConfigKey as keyof typeof CHART_CONFIG_VARIANT_3
-            ]?.color ?? generateRandomHexColorCode()
+            ]?.color ?? generateRandomHexColorCodeUtil()
           }
           strokeWidth={2}
           dot={{
             fill:
               CHART_CONFIG_VARIANT_3?.[
                 initialChartConfigKey as keyof typeof CHART_CONFIG_VARIANT_3
-              ]?.color ?? generateRandomHexColorCode(),
+              ]?.color ?? generateRandomHexColorCodeUtil(),
           }}
           activeDot={{
             r: 6,

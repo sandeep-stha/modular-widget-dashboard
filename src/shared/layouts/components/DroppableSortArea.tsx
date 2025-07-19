@@ -9,20 +9,15 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Droppable } from '@/shared/components';
-import {
-  DASHBOARD_CHART_COMPONENT_LIST_DROPPABLE_ZONE_ID,
-  DASHBOARD_CHART_COMPONENT_LIST_SORTABLE_ZONE_ID,
-  ITEM_HEIGHT,
-  ITEM_WIDTH,
-} from '@/shared/constants';
+import { ITEM_HEIGHT, ITEM_WIDTH } from '@/shared/constants';
+import { ELayoutBasedDndKitVariants } from '@/shared/enums';
+import { useDroppedItemsStore } from '@/shared/stores';
 
 import { VirtualSortableItm } from './VirtualSortableItm';
 
-import type { DroppableSortAreaPropsType } from './types-component';
+export function DroppableSortArea() {
+  const { droppedItems } = useDroppedItemsStore();
 
-export function DroppableSortArea({
-  droppedItems,
-}: DroppableSortAreaPropsType) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [containerWidth, setContainerWidth] = useState(0);
@@ -69,9 +64,9 @@ export function DroppableSortArea({
         </TooltipContent>
       </Tooltip>
 
-      <Droppable id={DASHBOARD_CHART_COMPONENT_LIST_DROPPABLE_ZONE_ID}>
+      <Droppable id={ELayoutBasedDndKitVariants?.MAIN_SORTABLE_ZONE}>
         <SortableContext
-          id={DASHBOARD_CHART_COMPONENT_LIST_SORTABLE_ZONE_ID}
+          id={ELayoutBasedDndKitVariants?.MAIN_SORTABLE_ZONE}
           items={droppedItems}
         >
           {containerWidth > 0 && containerHeight > 0 && (
@@ -82,7 +77,7 @@ export function DroppableSortArea({
               rowHeight={ITEM_HEIGHT}
               width={containerWidth}
               height={containerHeight}
-              itemData={{ droppedItems, columnCount }}
+              itemData={{ columnCount }}
             >
               {VirtualSortableItm}
             </Grid>

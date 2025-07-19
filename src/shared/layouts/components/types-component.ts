@@ -3,15 +3,15 @@ import type { MandatoryDndKitPropsType } from '@/shared/components';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import type { Dispatch, SetStateAction } from 'react';
 import type { GridChildComponentProps } from 'react-window';
+import type { UUIDTypes } from 'uuid';
 
-type DroppedItemsType = Array<{ id: UniqueIdentifier; metaData?: unknown }>;
-
-type DroppableSortAreaPropsType = {
-  droppedItems: DroppedItemsType;
-};
+type DroppedItemsType = Array<{
+  id: UniqueIdentifier;
+  uuid: UUIDTypes;
+  data: string | null;
+}>;
 
 type VirtualSortableItmPropsType = GridChildComponentProps<{
-  droppedItems: DroppedItemsType;
   columnCount: number;
 }>;
 
@@ -34,7 +34,6 @@ type TrashBinDroppablePropsType = {
 } & MandatoryDndKitPropsType;
 
 export type {
-  DroppableSortAreaPropsType,
   DroppedItemsType,
   LayoutBodyPropsType,
   LayoutDndActiveElementType,

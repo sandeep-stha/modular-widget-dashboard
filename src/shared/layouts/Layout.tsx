@@ -1,4 +1,5 @@
-import { Header, MainUI } from './components';
+import { Header } from './components';
+import { MainUI } from './components/Main';
 
 export function Layout() {
   return (

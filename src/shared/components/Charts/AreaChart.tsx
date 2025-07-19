@@ -15,7 +15,7 @@ import {
   CHART_CONFIG_VARIANT_1,
   CHART_DATA_VARIANT_1,
 } from '@/shared/constants';
-import { generateRandomHexColorCode } from '@/shared/utils';
+import { generateRandomHexColorCodeUtil } from '@/shared/utils';
 
 import type { BaseChartDataPropsType } from './types-chart';
 
@@ -53,9 +53,9 @@ export const AreaChart = memo(function AreaChartComponent({
             key={dataItm}
             dataKey={dataItm}
             type="natural"
-            fill={`${dataIdx <= 5 ? `var(--chart-${dataIdx + 1})` : generateRandomHexColorCode()}`}
+            fill={`${dataIdx <= 5 ? `var(--chart-${dataIdx + 1})` : generateRandomHexColorCodeUtil()}`}
             fillOpacity={0.4}
-            stroke={`${dataIdx <= 5 ? `var(--chart-${dataIdx + 1})` : generateRandomHexColorCode()}`}
+            stroke={`${dataIdx <= 5 ? `var(--chart-${dataIdx + 1})` : generateRandomHexColorCodeUtil()}`}
             stackId="a"
           />
         ))}
