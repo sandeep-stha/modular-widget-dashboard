@@ -1,5 +1,6 @@
 import { DASHBOARD_CHART_COMPONENT_LIST } from '@/shared/constants';
 import { ELayoutBasedDndKitVariants } from '@/shared/enums';
+import { useDroppedItemsStore } from '@/shared/stores';
 
 import { SortableDynamicComponentSwitcher } from './SortableDynamicComponentSwitcher';
 
@@ -11,7 +12,9 @@ export function VirtualSortableItm({
   style,
   data,
 }: VirtualSortableItmPropsType) {
-  const { droppedItems, columnCount } = data;
+  const { droppedItems } = useDroppedItemsStore();
+
+  const { columnCount } = data;
 
   const droppedItmIdx = rowIndex * columnCount + columnIndex;
 
@@ -30,7 +33,7 @@ export function VirtualSortableItm({
 
   return (
     <div style={style}>
-      <div className="p-4">
+      <div className="p-4 ">
         <SortableDynamicComponentSwitcher
           key={droppedItmId}
           id={droppedItmId}

@@ -15,14 +15,12 @@ import {
   ITEM_HEIGHT,
   ITEM_WIDTH,
 } from '@/shared/constants';
+import { useDroppedItemsStore } from '@/shared/stores';
 
 import { VirtualSortableItm } from './VirtualSortableItm';
 
-import type { DroppableSortAreaPropsType } from './types-component';
-
-export function DroppableSortArea({
-  droppedItems,
-}: DroppableSortAreaPropsType) {
+export function DroppableSortArea() {
+  const { droppedItems } = useDroppedItemsStore();
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [containerWidth, setContainerWidth] = useState(0);
@@ -82,7 +80,7 @@ export function DroppableSortArea({
               rowHeight={ITEM_HEIGHT}
               width={containerWidth}
               height={containerHeight}
-              itemData={{ droppedItems, columnCount }}
+              itemData={{ columnCount }}
             >
               {VirtualSortableItm}
             </Grid>

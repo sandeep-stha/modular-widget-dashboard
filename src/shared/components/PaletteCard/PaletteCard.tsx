@@ -5,7 +5,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import type { PaletteCardProps } from './types-card';
+import type { PaletteCardProps } from './types-paletteCard';
 
 export function PaletteCard({ title, description }: PaletteCardProps) {
   return (

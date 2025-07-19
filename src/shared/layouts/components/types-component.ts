@@ -6,12 +6,7 @@ import type { GridChildComponentProps } from 'react-window';
 
 type DroppedItemsType = Array<{ id: UniqueIdentifier; metaData?: unknown }>;
 
-type DroppableSortAreaPropsType = {
-  droppedItems: DroppedItemsType;
-};
-
 type VirtualSortableItmPropsType = GridChildComponentProps<{
-  droppedItems: DroppedItemsType;
   columnCount: number;
 }>;
 
@@ -34,7 +29,6 @@ type TrashBinDroppablePropsType = {
 } & MandatoryDndKitPropsType;
 
 export type {
-  DroppableSortAreaPropsType,
   DroppedItemsType,
   LayoutBodyPropsType,
   LayoutDndActiveElementType,

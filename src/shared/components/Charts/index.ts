@@ -4,3 +4,4 @@ export * from './LineChart';
 export * from './PieChart';
 export * from './RadialBarChart';
 export * from './StackedBarChart';
+export * from './types-chart';
