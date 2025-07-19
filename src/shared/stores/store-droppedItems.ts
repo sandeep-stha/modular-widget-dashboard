@@ -1,4 +1,7 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
+import { cookieUtil, removeFalsyPropertiesUtil } from '../utils';
 
 import type { DroppedItemsType } from '../layouts/components/types-component';
 
@@ -8,10 +11,19 @@ type DroppedItemsState = {
   resetDroppedItems: () => void;
 };
 
-export const useDroppedItemsStore = create<DroppedItemsState>()((set) => ({
-  droppedItems: [],
+export const useDroppedItemsStore = create<DroppedItemsState>()(
+  persist(
+    (set) => ({
+      droppedItems: [],
 
-  setDroppedItems: (items) => set({ droppedItems: items }),
+      setDroppedItems: (items) => set({ droppedItems: items }),
 
-  resetDroppedItems: () => set({ droppedItems: [] }),
-}));
+      resetDroppedItems: () =>
+        set(removeFalsyPropertiesUtil({ droppedItems: [] })),
+    }),
+    {
+      name: 'dropped-items-storage',
+      storage: createJSONStorage(() => cookieUtil),
+    }
+  )
+);

@@ -3,6 +3,7 @@ import {
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
+  pointerWithin,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -13,6 +14,7 @@ import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { Info } from 'lucide-react';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   Tooltip,
@@ -44,16 +46,13 @@ export function MainUI() {
     })
   );
 
+  const parsedCurrentActiveItmID = modifyInputDataUtil(currentActiveItm?.id, {
+    popAfterLastMatch: '_',
+  });
+
   const activeComponent = DASHBOARD_CHART_COMPONENT_LIST.find(
     (componentItm) => {
-      const parsedCurrentActiveItmID = modifyInputDataUtil(
-        currentActiveItm?.id,
-        {
-          replace: [ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE],
-          removeAfterLastMatch: '-',
-        }
-      );
-      return parsedCurrentActiveItmID === componentItm.id;
+      return `${parsedCurrentActiveItmID}` === `${componentItm.id}`;
     }
   );
 
@@ -64,6 +63,7 @@ export function MainUI() {
 
   return (
     <DndContext
+      collisionDetection={pointerWithin}
       sensors={sensors}
       modifiers={[snapCenterToCursor]}
       onDragStart={handleDragStart}
@@ -124,8 +124,6 @@ export function MainUI() {
   }
 
   function handleDragEnd(event: DragEndEvent) {
-    const droppedItmIdArr = droppedItems?.map((droppedItm) => droppedItm?.id);
-
     const { active, over } = event;
 
     if (!over) {
@@ -133,29 +131,36 @@ export function MainUI() {
       return;
     }
 
-    const activeId = active.id?.toString();
-    const overId = over.id?.toString();
-
-    const isActiveInList = droppedItmIdArr.includes(activeId);
-
-    const isOverInList = droppedItmIdArr.includes(overId);
+    const activeId = active.id;
+    const overId = over.id;
 
     const oldIndex = droppedItems.findIndex((itm) => itm?.id === activeId);
     const newIndex = droppedItems.findIndex((itm) => itm?.id === overId);
 
-    const isSorting = isActiveInList && isOverInList && activeId !== overId;
+    const isAddition = overId === ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE;
+
+    const isDeletion = over?.id === ELayoutBasedDndKitVariants.TRASH_BIN;
 
     // Deletion
-    if (over?.id === ELayoutBasedDndKitVariants.TRASH_BIN) {
-      const newDroppedItemAfterDeletion = droppedItems?.filter(
-        (droppedItm) => droppedItm?.id !== activeId
+    if (isDeletion) {
+      const newDroppedItemAfterDeletion = droppedItems.filter(
+        (itm) => itm.id !== activeId
       );
 
       setDroppedItems(newDroppedItemAfterDeletion);
-    }
-
-    // Sorting
-    if (isSorting) {
+    } else if (isAddition) {
+      // Addition
+      const newDroppedItems = [
+        ...droppedItems,
+        {
+          id: [activeId, uuidv4()].join('_'),
+          uuid: uuidv4(),
+          data: null,
+        },
+      ];
+      setDroppedItems(newDroppedItems);
+    } else {
+      //Sorting
       const item = droppedItems[oldIndex];
       const withoutItem = droppedItems.filter((_, idx) => idx !== oldIndex);
 
@@ -165,16 +170,6 @@ export function MainUI() {
         ...withoutItem.slice(newIndex),
       ];
       setDroppedItems(reOrderedItems);
-    } else if (!isActiveInList) {
-      // Addition
-      const newDroppedItems = [
-        ...droppedItems,
-        {
-          id: active.id + ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE,
-          metaData: null,
-        },
-      ];
-      setDroppedItems(newDroppedItems);
     }
 
     setCurrentActiveItm(null);

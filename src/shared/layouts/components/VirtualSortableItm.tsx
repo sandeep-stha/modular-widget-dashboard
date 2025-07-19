@@ -1,6 +1,6 @@
 import { DASHBOARD_CHART_COMPONENT_LIST } from '@/shared/constants';
-import { ELayoutBasedDndKitVariants } from '@/shared/enums';
 import { useDroppedItemsStore } from '@/shared/stores';
+import { modifyInputDataUtil } from '@/shared/utils';
 
 import { SortableDynamicComponentSwitcher } from './SortableDynamicComponentSwitcher';
 
@@ -20,15 +20,17 @@ export function VirtualSortableItm({
 
   const droppedItmId = droppedItems[droppedItmIdx]?.id;
 
-  const paletteCardComponent = DASHBOARD_CHART_COMPONENT_LIST.find(
-    (componentItm) => droppedItmId?.toString()?.includes(componentItm.id)
+  const renderComponent = DASHBOARD_CHART_COMPONENT_LIST.find(
+    (componentItm) => {
+      const parsedDroppedItmId = modifyInputDataUtil(droppedItmId, {
+        popAfterLastMatch: '_',
+      });
+
+      return parsedDroppedItmId === `${componentItm.id}`;
+    }
   );
 
-  if (
-    !droppedItmId ||
-    droppedItmIdx >= droppedItems.length ||
-    !paletteCardComponent
-  )
+  if (!droppedItmId || droppedItmIdx >= droppedItems.length || !renderComponent)
     return null;
 
   return (
@@ -37,7 +39,6 @@ export function VirtualSortableItm({
         <SortableDynamicComponentSwitcher
           key={droppedItmId}
           id={droppedItmId}
-          metaData={{ type: ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE }}
         />
       </div>
     </div>

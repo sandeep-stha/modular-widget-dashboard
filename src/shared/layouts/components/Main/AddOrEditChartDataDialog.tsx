@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Dialog } from '@/shared/components';
-import { useDroppedItemsStore } from '@/shared/stores';
 
 import type { CustomDialogPropsType } from './types-customDialog';
 
@@ -27,7 +26,6 @@ const defaultValues = {
 
 export function AddOrEditChartDataDialog({
   selectedItmId,
-  selectedItmType,
 
   open,
   handleOpenChange,
@@ -39,16 +37,12 @@ export function AddOrEditChartDataDialog({
     defaultValues,
   });
 
-  const { control, watch } = formMethods;
+  const { control } = formMethods;
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'chart',
   });
-
-  const { droppedItems } = useDroppedItemsStore();
-
-  console.log('the watch is', watch());
 
   return (
     <Dialog
@@ -61,60 +55,95 @@ export function AddOrEditChartDataDialog({
     >
       <FormProvider {...formMethods}>
         <div className="flex flex-col gap-y-4">
-          {fields?.map((_, idx) => (
-            <div
-              key={idx}
-              className="flex flex-row justify-between items-start gap-x-4"
-            >
-              <FormField
-                control={control}
-                name={`chart.${idx}.data`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data {idx + 1}</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter chart data" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your display data.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name={`chart.${idx}.color`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Color {idx + 1}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="color"
-                        placeholder="Pick a color to represent in chart"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {idx === fields?.length - 1 && (
+          {fields?.map((_, idx) => {
+            const isFirstItemOutOfMultiple = fields?.length > 1 && idx === 0;
+            const isLastItem = idx === fields.length - 1;
+
+            const fieldArrayFunctionProps = {
+              isLastItem,
+              idx,
+            };
+
+            return (
+              <div
+                key={idx}
+                className="flex flex-row justify-between items-start gap-x-4"
+              >
+                <FormField
+                  control={control}
+                  name={`chart.${idx}.data`}
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Data {idx + 1}</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter chart data" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        {`This is your display data no. ${idx + 1}`}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={control}
+                  name={`chart.${idx}.color`}
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Color {idx + 1}</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="color"
+                          placeholder="Pick a color to represent in chart"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {` This is your public display name no. ${idx + 1}`}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button
-                  className="mt-6 px-4 py-1 rounded-2xl"
-                  onClick={() => append(chartDefaultValues)}
+                  className={`mt-6 w-28 py-1 rounded-2xl ${
+                    isFirstItemOutOfMultiple && 'hidden'
+                  }`}
+                  onClick={() =>
+                    handleFieldArrayAppendOrRemove(fieldArrayFunctionProps)
+                  }
                 >
-                  <Plus />
-                  Add
+                  {isLastItem ? (
+                    <>
+                      <Plus className="w-4 h-4" />
+                      Add
+                    </>
+                  ) : (
+                    <>
+                      <Minus className="w-4 h-4" />
+                      Remove
+                    </>
+                  )}
                 </Button>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </FormProvider>
     </Dialog>
   );
+
+  function handleFieldArrayAppendOrRemove({
+    isLastItem,
+    idx,
+  }: {
+    isLastItem?: boolean;
+    idx: number;
+  }) {
+    if (isLastItem) {
+      return append(chartDefaultValues);
+    } else if (idx > 0) {
+      remove(idx);
+    }
+  }
 }

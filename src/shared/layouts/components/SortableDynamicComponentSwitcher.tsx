@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 import { type BaseDndKitPropsType } from '@/shared/components';
 import { DASHBOARD_CHART_COMPONENT_LIST } from '@/shared/constants';
-import { ELayoutBasedDndKitVariants } from '@/shared/enums';
 import {
   generateUIComponentByTypeUtil,
   modifyInputDataUtil,
@@ -28,13 +27,12 @@ export function SortableDynamicComponentSwitcher({
   const isSorting = id === active?.id;
 
   const parsedIdentifierID = modifyInputDataUtil(id, {
-    replace: [ELayoutBasedDndKitVariants.MAIN_SORTABLE_ZONE],
-    removeAfterLastMatch: '-',
+    popAfterLastMatch: '_',
   });
 
   const componentMetaData = parsedIdentifierID
-    ? DASHBOARD_CHART_COMPONENT_LIST.find(
-        (componentItm) => componentItm.id === parsedIdentifierID
+    ? DASHBOARD_CHART_COMPONENT_LIST?.find(
+        (componentItm) => parsedIdentifierID === `${componentItm.id}`
       )
     : null;
 
@@ -81,8 +79,8 @@ export function SortableDynamicComponentSwitcher({
   }
 
   function handleEditClick() {
-    const currentEditItmType = DASHBOARD_CHART_COMPONENT_LIST?.find((itm) =>
-      id?.toString()?.includes(itm?.id)
+    const currentEditItmType = DASHBOARD_CHART_COMPONENT_LIST?.find(
+      (itm) => parsedIdentifierID === itm?.id?.toString()
     )?.type;
 
     setSelectedItmType(currentEditItmType);
