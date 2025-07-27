@@ -16,9 +16,9 @@ export function removeFalsyPropertiesUtil<T extends object>(
 
   for (const [key, value] of Object.entries(obj)) {
     const isFalsy =
+      value === '' ||
       value === null ||
       value === undefined ||
-      value === '' ||
       value === 'null' ||
       value === 'undefined' ||
       (!keepFalse && value === false) ||

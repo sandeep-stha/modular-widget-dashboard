@@ -16,11 +16,26 @@ export const useDroppedItemsStore = create<DroppedItemsState>()(
     (set) => ({
       droppedItems: [],
 
-      setDroppedItems: (items) => set({ droppedItems: items }),
+      setDroppedItems: (items) => {
+        let safelyParsedItems = items;
+
+        if (!items?.length) {
+          safelyParsedItems = [];
+        }
+
+        if (items?.length) {
+          safelyParsedItems = items?.map((itm) =>
+            removeFalsyPropertiesUtil(itm)
+          ) as DroppedItemsType;
+        }
+
+        set({ droppedItems: safelyParsedItems });
+      },
 
       resetDroppedItems: () =>
         set(removeFalsyPropertiesUtil({ droppedItems: [] })),
     }),
+
     {
       name: 'dropped-items-storage',
       storage: createJSONStorage(() => cookieUtil),

@@ -8,22 +8,22 @@ import {
 } from 'recharts';
 
 import { ChartContainer } from '@/components/ui/chart';
-import {
-  CHART_CONFIG_VARIANT_2,
-  CHART_DATA_VARIANT_2,
-} from '@/shared/constants';
+
+import { generateChartConfigAndDataVariant3Util } from './utils';
 
 import type { BaseChartDataPropsType } from './types-chart';
+import type { FieldValues } from 'react-hook-form';
 
 export const RadialBarChart = memo(function RadialBarChartComponent({
-  data = CHART_DATA_VARIANT_2,
-}: BaseChartDataPropsType<typeof CHART_DATA_VARIANT_2>) {
-  const initialChartConfigKey = (Object.keys(CHART_CONFIG_VARIANT_2) ??
-    [])?.[0];
+  chartPayload,
+}: BaseChartDataPropsType) {
+  const { config, data } = generateChartConfigAndDataVariant3Util(chartPayload);
+
+  const initialChartConfigKey = (Object.keys(config) ?? [])?.[0];
 
   return (
     <ChartContainer
-      config={CHART_CONFIG_VARIANT_2}
+      config={config}
       className="mx-auto aspect-square max-h-[250px]"
     >
       <ReChartsRadialBarChart
@@ -61,7 +61,9 @@ export const RadialBarChart = memo(function RadialBarChartComponent({
                       y={viewBox.cy}
                       className="fill-foreground text-4xl font-bold"
                     >
-                      {data[0].visitors.toLocaleString()}
+                      {(data[0] as FieldValues)?.[
+                        `${initialChartConfigKey?.[0] as string}`
+                      ]?.toLocaleString()}
                     </tspan>
                     <tspan
                       x={viewBox.cx}

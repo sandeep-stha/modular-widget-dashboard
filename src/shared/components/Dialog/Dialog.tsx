@@ -23,10 +23,20 @@ export function Dialog({
   primaryAction,
   secondaryAction,
 }: DialogPropsType) {
+  const secondaryActionComponent = (
+    <Button
+      variant={secondaryAction?.buttonProps?.variant ?? 'outline'}
+      type={primaryAction?.buttonProps?.type ?? 'button'}
+      onClick={secondaryAction?.handleFn}
+      {...secondaryAction?.buttonProps}
+    >
+      {secondaryAction?.label ?? 'Close'}
+    </Button>
+  );
   return (
     <ShadCnDialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
-        className="w-full sm:max-w-[425px] md:max-w-fit"
+        className="w-full sm:max-w-[425px] md:max-w-[700px]"
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
@@ -36,16 +46,13 @@ export function Dialog({
         <div className="max-h-[75dvh] overflow-auto">{children}</div>
         <DialogFooter>
           {!secondaryAction?.hidden && (
-            <DialogClose asChild>
-              <Button
-                variant={secondaryAction?.buttonProps?.variant ?? 'outline'}
-                type={primaryAction?.buttonProps?.type ?? 'button'}
-                onClick={secondaryAction?.handleFn}
-                {...secondaryAction?.buttonProps}
-              >
-                {secondaryAction?.label ?? 'Close'}
-              </Button>
-            </DialogClose>
+            <>
+              {secondaryAction?.preventClose ? (
+                secondaryActionComponent
+              ) : (
+                <DialogClose asChild>{secondaryActionComponent}</DialogClose>
+              )}
+            </>
           )}
           {!primaryAction?.hidden && (
             <Button

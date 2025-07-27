@@ -1,121 +1,90 @@
 import type { ChartConfig } from '@/components/ui/chart';
 
 const CHART_CONFIG_VARIANT_1 = {
-  desktop: {
-    label: 'Desktop',
+  data1: {
+    label: 'Data1',
     color: 'var(--chart-1)',
   },
-  mobile: {
-    label: 'Mobile',
+  data2: {
+    label: 'Data2',
     color: 'var(--chart-2)',
   },
 } satisfies ChartConfig;
 
 const CHART_DATA_VARIANT_1 = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
+  { month: 'Group1', data1: 186, data2: 80 },
+  { month: 'Group2', data1: 305, data2: 200 },
+  { month: 'Group3', data1: 237, data2: 120 },
+  { month: 'Group4', data1: 73, data2: 190 },
+  { month: 'Group5', data1: 209, data2: 130 },
+  { month: 'Group6', data1: 214, data2: 140 },
 ];
 
 const CHART_CONFIG_VARIANT_2 = {
   visitors: {
-    label: 'Visitors',
+    label: 'Data1',
+    color: 'var(--chart-2)',
   },
-  chrome: {
-    label: 'Chrome',
+  data1: {
+    label: '',
     color: 'var(--chart-1)',
   },
-  safari: {
+  data2: {
     label: 'Safari',
     color: 'var(--chart-2)',
   },
-  firefox: {
+  data3: {
     label: 'Firefox',
     color: 'var(--chart-3)',
   },
-  edge: {
+  data4: {
     label: 'Edge',
     color: 'var(--chart-4)',
   },
-  other: {
+  data5: {
+    label: 'Other',
+    color: 'var(--chart-5)',
+  },
+} satisfies ChartConfig;
+
+const CHART_CONFIG_VARIANT_3 = {
+  visitors: {
+    label: 'Visitors',
+  },
+  data1: {
+    label: 'Chrome',
+    color: 'var(--chart-1)',
+  },
+  data2: {
+    label: 'Safari',
+    color: 'var(--chart-2)',
+  },
+  data3: {
+    label: 'Firefox',
+    color: 'var(--chart-3)',
+  },
+  data4: {
+    label: 'Edge',
+    color: 'var(--chart-4)',
+  },
+  data5: {
     label: 'Other',
     color: 'var(--chart-5)',
   },
 } satisfies ChartConfig;
 
 const CHART_DATA_VARIANT_2 = [
-  { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
-  { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-  { browser: 'firefox', visitors: 187, fill: 'var(--color-firefox)' },
-  { browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
-  { browser: 'other', visitors: 90, fill: 'var(--color-other)' },
-];
-
-const CHART_CONFIG_VARIANT_3 = {
-  visitors: {
-    label: 'Visitors',
-    color: 'var(--chart-2)',
-  },
-  chrome: {
-    label: 'Chrome',
-    color: 'var(--chart-1)',
-  },
-  safari: {
-    label: 'Safari',
-    color: 'var(--chart-2)',
-  },
-  firefox: {
-    label: 'Firefox',
-    color: 'var(--chart-3)',
-  },
-  edge: {
-    label: 'Edge',
-    color: 'var(--chart-4)',
-  },
-  other: {
-    label: 'Other',
-    color: 'var(--chart-5)',
-  },
-} satisfies ChartConfig;
-
-const CHART_DATA_VARIANT_3 = [
-  { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
-  { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-  { browser: 'firefox', visitors: 187, fill: 'var(--color-firefox)' },
-  { browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
-  { browser: 'other', visitors: 90, fill: 'var(--color-other)' },
-];
-
-const CHART_CONFIG_VARIANT_4 = {
-  running: {
-    label: 'Running',
-    color: 'var(--chart-1)',
-  },
-  swimming: {
-    label: 'Swimming',
-    color: 'var(--chart-2)',
-  },
-} satisfies ChartConfig;
-
-const CHART_DATA_VARIANT_4 = [
-  { date: '2025-11-06', running: 450, swimming: 300 },
-  { date: '2025-11-07', running: 380, swimming: 420 },
-  { date: '2025-11-08', running: 520, swimming: 120 },
-  { date: '2025-11-09', running: 140, swimming: 550 },
-  { date: '2025-11-10', running: 600, swimming: 350 },
-  { date: '2025-11-11', running: 480, swimming: 400 },
+  { browser: 'data1', visitors: 275, fill: 'var(--color-chrome)' },
+  { browser: 'data2', visitors: 200, fill: 'var(--color-safari)' },
+  { browser: 'data3', visitors: 187, fill: 'var(--color-firefox)' },
+  { browser: 'data4', visitors: 173, fill: 'var(--color-edge)' },
+  { browser: 'data5', visitors: 90, fill: 'var(--color-other)' },
 ];
 
 export {
   CHART_CONFIG_VARIANT_1,
   CHART_CONFIG_VARIANT_2,
   CHART_CONFIG_VARIANT_3,
-  CHART_CONFIG_VARIANT_4,
   CHART_DATA_VARIANT_1,
   CHART_DATA_VARIANT_2,
-  CHART_DATA_VARIANT_3,
-  CHART_DATA_VARIANT_4,
 };

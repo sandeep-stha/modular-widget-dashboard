@@ -1,6 +1,10 @@
 import type { ButtonPropsType } from '../Button';
 import type { ReactNode } from 'react';
 
+type DialogButtonPropsType = {
+  preventClose?: boolean;
+} & ButtonPropsType;
+
 type CoreDialogPropsType = {
   title: string;
   description: string;
@@ -11,11 +15,15 @@ type CoreDialogPropsType = {
 type BaseDialogPropsType = {
   open: boolean;
   handleOpenChange: VoidFunction;
-
-  primaryAction?: ButtonPropsType;
-  secondaryAction?: ButtonPropsType;
 };
 
-type DialogPropsType = CoreDialogPropsType & BaseDialogPropsType;
+type BasicDialogPropsType = {
+  primaryAction?: ButtonPropsType;
+  secondaryAction?: DialogButtonPropsType;
+};
+
+type DialogPropsType = CoreDialogPropsType &
+  BaseDialogPropsType &
+  BasicDialogPropsType;
 
 export type { BaseDialogPropsType, DialogPropsType };

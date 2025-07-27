@@ -56,9 +56,6 @@ export function MainUI() {
     }
   );
 
-  const isTrashbinDroppableEnabled =
-    currentActiveItm?.type !== ELayoutBasedDndKitVariants.SIDEBAR;
-
   const { droppedItems, setDroppedItems } = useDroppedItemsStore();
 
   return (
@@ -91,10 +88,7 @@ export function MainUI() {
           <SidebarList />
 
           {/* Sidebar Droppable Trash Bin Area */}
-          <TrashbinDroppable
-            id={ELayoutBasedDndKitVariants.TRASH_BIN}
-            enabled={isTrashbinDroppableEnabled}
-          />
+          <TrashbinDroppable id={ELayoutBasedDndKitVariants.TRASH_BIN} />
         </aside>
 
         {/* Component Droppable and Sortable Area */}
@@ -154,8 +148,6 @@ export function MainUI() {
         ...droppedItems,
         {
           id: [activeId, uuidv4()].join('_'),
-          uuid: uuidv4(),
-          data: null,
         },
       ];
       setDroppedItems(newDroppedItems);

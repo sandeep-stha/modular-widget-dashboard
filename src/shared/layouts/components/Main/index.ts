@@ -1,2 +1,2 @@
-export * from './AddOrEditChartDataDialog';
+export * from './AddOrEditChartDialog';
 export * from './MainUI';
