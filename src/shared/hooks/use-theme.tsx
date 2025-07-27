@@ -15,8 +15,8 @@ export function useTheme(initial = 'system') {
       root.classList.remove('light', 'dark');
 
       if (theme === 'system') {
-        const currentTheme = getCurrentSystemThemeUtil();
-        root.classList.add(currentTheme);
+        const currentOsTheme = getCurrentSystemThemeUtil();
+        root.classList.add(currentOsTheme);
       } else {
         root.classList.add(theme);
       }

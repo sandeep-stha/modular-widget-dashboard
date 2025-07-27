@@ -1,11 +1,15 @@
 import type { BaseDialogPropsType } from '@/shared/components';
-
-import type { DroppedItemsType } from '../types-component';
+import type { DASHBOARD_CHART_COMPONENT_LIST } from '@/shared/constants';
 
 type CustomDialogPropsType = BaseDialogPropsType & {
-  selectedItmId?: string;
-  selectedItmType?: string;
-  droppedItmList?: DroppedItemsType;
+  selectedItm: {
+    id?: string;
+    metaData?: (typeof DASHBOARD_CHART_COMPONENT_LIST)[number];
+  };
 };
 
-export type { CustomDialogPropsType };
+type ChartDataFormPropsType = {
+  parentIndex: number;
+};
+
+export type { ChartDataFormPropsType, CustomDialogPropsType };

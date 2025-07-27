@@ -1,7 +1,9 @@
 import { ESystemTheme } from '../enums';
 
 export function getCurrentSystemThemeUtil() {
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isSystemDarkThemed = window.matchMedia(
+    '(prefers-color-scheme: dark)'
+  ).matches;
 
-  return isDark ? ESystemTheme.DARK : ESystemTheme.LIGHT;
+  return isSystemDarkThemed ? ESystemTheme.DARK : ESystemTheme.LIGHT;
 }

@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { type BaseDndKitPropsType } from '@/shared/components';
 import { DASHBOARD_CHART_COMPONENT_LIST } from '@/shared/constants';
+import { useDroppedItemsStore } from '@/shared/stores';
 import {
   generateUIComponentByTypeUtil,
   modifyInputDataUtil,
@@ -16,6 +17,7 @@ export function SortableDynamicComponentSwitcher({
   id,
   metaData,
 }: Omit<BaseDndKitPropsType, 'children'>) {
+  const { droppedItems } = useDroppedItemsStore();
   const { attributes, listeners, setNodeRef, transform, transition, active } =
     useSortable({ id, ...(metaData ? { data: metaData } : {}) });
 
@@ -36,9 +38,12 @@ export function SortableDynamicComponentSwitcher({
       )
     : null;
 
-  const [isOpen, setIsOpen] = useState(false);
+  const currentDroppedItemsData = droppedItems?.find((itm) => itm?.id === id);
+  const sanitizedCurrentDroppedItemsData = currentDroppedItemsData?.data
+    ? JSON.parse(currentDroppedItemsData?.data)
+    : '';
 
-  const [selectedItmType, setSelectedItmType] = useState<string>();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -46,8 +51,14 @@ export function SortableDynamicComponentSwitcher({
         <AddOrEditChartDataDialog
           open={isOpen}
           handleOpenChange={handleDialogClose}
-          selectedItmId={id?.toString()}
-          selectedItmType={selectedItmType}
+          selectedItm={{
+            id: id?.toString(),
+            ...(componentMetaData
+              ? {
+                  metaData: componentMetaData,
+                }
+              : {}),
+          }}
         />
       )}
       <div
@@ -68,7 +79,9 @@ export function SortableDynamicComponentSwitcher({
             </div>
           </div>
           {componentMetaData &&
-            generateUIComponentByTypeUtil(componentMetaData)}
+            generateUIComponentByTypeUtil(componentMetaData, {
+              data: sanitizedCurrentDroppedItemsData,
+            })}
         </div>
       </div>
     </>
@@ -79,12 +92,6 @@ export function SortableDynamicComponentSwitcher({
   }
 
   function handleEditClick() {
-    const currentEditItmType = DASHBOARD_CHART_COMPONENT_LIST?.find(
-      (itm) => parsedIdentifierID === itm?.id?.toString()
-    )?.type;
-
-    setSelectedItmType(currentEditItmType);
-
     setIsOpen(true);
   }
 }

@@ -6,23 +6,22 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import {
-  CHART_CONFIG_VARIANT_2,
-  CHART_DATA_VARIANT_2,
-} from '@/shared/constants';
+
+import { generateChartConfigAndDataVariant3Util } from './utils';
 
 import type { BaseChartDataPropsType } from './types-chart';
 
 export const PieChart = memo(function PieChartComponent({
-  data = CHART_DATA_VARIANT_2,
-}: BaseChartDataPropsType<typeof CHART_DATA_VARIANT_2>) {
+  chartPayload,
+}: BaseChartDataPropsType) {
+  const { config, data } = generateChartConfigAndDataVariant3Util(chartPayload);
+
   const initialDataKey = (Object.keys(data?.[0]) ?? [])?.[0];
-  const initialChartConfigKey = (Object.keys(CHART_CONFIG_VARIANT_2) ??
-    [])?.[0];
+  const initialChartConfigKey = (Object.keys(config) ?? [])?.[0];
 
   return (
     <ChartContainer
-      config={CHART_CONFIG_VARIANT_2}
+      config={config}
       className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[250px] pb-0"
     >
       <ReChartsPieChart>
