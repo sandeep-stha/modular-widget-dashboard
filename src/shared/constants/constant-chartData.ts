@@ -1,90 +1,110 @@
 import type { ChartConfig } from '@/components/ui/chart';
 
+import { generateRandomHexColorCodeUtil } from '../utils';
+import { generateRandomNumberUtil } from '../utils/util-generateRandomNumber';
+
 const CHART_CONFIG_VARIANT_1 = {
   data1: {
     label: 'Data1',
-    color: 'var(--chart-1)',
+    color: generateRandomHexColorCodeUtil(),
   },
   data2: {
     label: 'Data2',
-    color: 'var(--chart-2)',
+    color: generateRandomHexColorCodeUtil(),
   },
 } satisfies ChartConfig;
 
 const CHART_DATA_VARIANT_1 = [
-  { month: 'Group1', data1: 186, data2: 80 },
-  { month: 'Group2', data1: 305, data2: 200 },
-  { month: 'Group3', data1: 237, data2: 120 },
-  { month: 'Group4', data1: 73, data2: 190 },
-  { month: 'Group5', data1: 209, data2: 130 },
-  { month: 'Group6', data1: 214, data2: 140 },
+  {
+    month: 'Group1',
+    data1: generateRandomNumberUtil(),
+    data2: generateRandomNumberUtil(),
+  },
+  {
+    month: 'Group2',
+    data1: generateRandomNumberUtil(),
+    data2: generateRandomNumberUtil(),
+  },
+  {
+    month: 'Group3',
+    data1: generateRandomNumberUtil(),
+    data2: generateRandomNumberUtil(),
+  },
+  {
+    month: 'Group4',
+    data1: generateRandomNumberUtil(),
+    data2: generateRandomNumberUtil(),
+  },
+  {
+    month: 'Group5',
+    data1: generateRandomNumberUtil(),
+    data2: generateRandomNumberUtil(),
+  },
+  {
+    month: 'Group6',
+    data1: generateRandomNumberUtil(),
+    data2: generateRandomNumberUtil(),
+  },
 ];
 
 const CHART_CONFIG_VARIANT_2 = {
-  visitors: {
+  category: {
+    label: 'Category',
+    color: generateRandomHexColorCodeUtil(),
+  },
+  data1: {
     label: 'Data1',
-    color: 'var(--chart-2)',
-  },
-  data1: {
-    label: '',
-    color: 'var(--chart-1)',
+    color: generateRandomHexColorCodeUtil(),
   },
   data2: {
-    label: 'Safari',
-    color: 'var(--chart-2)',
+    label: 'Data2',
+    color: generateRandomHexColorCodeUtil(),
   },
   data3: {
-    label: 'Firefox',
-    color: 'var(--chart-3)',
+    label: 'Data3',
+    color: generateRandomHexColorCodeUtil(),
   },
   data4: {
-    label: 'Edge',
-    color: 'var(--chart-4)',
+    label: 'Data4',
+    color: generateRandomHexColorCodeUtil(),
   },
   data5: {
-    label: 'Other',
-    color: 'var(--chart-5)',
-  },
-} satisfies ChartConfig;
-
-const CHART_CONFIG_VARIANT_3 = {
-  visitors: {
-    label: 'Visitors',
-  },
-  data1: {
-    label: 'Chrome',
-    color: 'var(--chart-1)',
-  },
-  data2: {
-    label: 'Safari',
-    color: 'var(--chart-2)',
-  },
-  data3: {
-    label: 'Firefox',
-    color: 'var(--chart-3)',
-  },
-  data4: {
-    label: 'Edge',
-    color: 'var(--chart-4)',
-  },
-  data5: {
-    label: 'Other',
-    color: 'var(--chart-5)',
+    label: 'Data5',
+    color: generateRandomHexColorCodeUtil(),
   },
 } satisfies ChartConfig;
 
 const CHART_DATA_VARIANT_2 = [
-  { browser: 'data1', visitors: 275, fill: 'var(--color-chrome)' },
-  { browser: 'data2', visitors: 200, fill: 'var(--color-safari)' },
-  { browser: 'data3', visitors: 187, fill: 'var(--color-firefox)' },
-  { browser: 'data4', visitors: 173, fill: 'var(--color-edge)' },
-  { browser: 'data5', visitors: 90, fill: 'var(--color-other)' },
+  {
+    group: 'data1',
+    category: generateRandomNumberUtil(),
+    fill: generateRandomHexColorCodeUtil(),
+  },
+  {
+    group: 'data2',
+    category: generateRandomNumberUtil(),
+    fill: generateRandomHexColorCodeUtil(),
+  },
+  {
+    group: 'data3',
+    category: generateRandomNumberUtil(),
+    fill: generateRandomHexColorCodeUtil(),
+  },
+  {
+    group: 'data4',
+    category: generateRandomNumberUtil(),
+    fill: generateRandomHexColorCodeUtil(),
+  },
+  {
+    group: 'data5',
+    category: generateRandomNumberUtil(),
+    fill: generateRandomHexColorCodeUtil(),
+  },
 ];
 
 export {
   CHART_CONFIG_VARIANT_1,
   CHART_CONFIG_VARIANT_2,
-  CHART_CONFIG_VARIANT_3,
   CHART_DATA_VARIANT_1,
   CHART_DATA_VARIANT_2,
 };
