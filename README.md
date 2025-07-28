@@ -182,4 +182,33 @@ bun run dev
 
 ## 📝 License
 
-MIT License © 2025 [Sandeep Shrestha](https://github.com/sandeep-stha)
+This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**  
+© 2025 [Sandeep Shrestha](https://github.com/sandeep-stha)
+
+---
+
+🔐 **Legal & Usage Notice**:
+
+✅ You are **free to**:
+
+- 📥 Use, study, and modify this software
+- 🔁 Share and redistribute modified versions
+
+⚠️ But you **must**:
+
+- 📖 Release your changes under the **same GPL-3.0 license**
+- 🧾 Include the **original copyright**
+- 🧠 Include the full license text (see `LICENSE` file)
+
+❌ **You cannot**:
+
+- 🚫 Re-license this project under a **non-GPL** license
+- 🚫 Use it in **closed-source** or **proprietary software**  
+  (unless **you release your own code as GPL too**)
+
+---
+
+📌 Full license text available at:  
+[📜 GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html)
+
+🔗 GitHub Repository: [modular-widget-dashboard](https://github.com/sandeep-stha/modular-widget-dashboard)
