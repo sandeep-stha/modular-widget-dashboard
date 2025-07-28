@@ -29,6 +29,7 @@ export function EntriesForm({
   } = useFieldArray({
     control,
     name: 'entries',
+    shouldUnregister: true,
   });
 
   return (

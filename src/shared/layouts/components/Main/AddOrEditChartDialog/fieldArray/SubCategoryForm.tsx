@@ -30,6 +30,7 @@ export function SubCategoryForm({
   } = useFieldArray({
     control,
     name: 'subCategory',
+    shouldUnregister: true,
   });
 
   const entriesWatch = watch('entries');
@@ -106,8 +107,8 @@ export function SubCategoryForm({
 
   function renderAddSubCategoriesButton(idx: number) {
     if (
-      chartType === EDashboardChartComponentVariants.RADIAL_BAR_CHART &&
-      subCategoryFields?.length >= 2
+      chartType === EDashboardChartComponentVariants.PIE_CHART ||
+      chartType === EDashboardChartComponentVariants.RADIAL_BAR_CHART
     ) {
       return null;
     }
