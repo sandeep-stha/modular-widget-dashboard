@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { getCurrentSystemThemeUtil } from '../utils';
 
-export function useTheme(initial = 'system') {
+export function useTheme(initial = 'light') {
   const [theme, setTheme] = useState(() => {
     if (typeof window === 'undefined') return initial;
     return localStorage.getItem('theme') || initial;
